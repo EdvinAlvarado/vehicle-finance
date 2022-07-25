@@ -3,6 +3,7 @@ import Data.List (transpose)
 
 
 data Loan = Loan {down :: Float, interest:: Float, period :: Int}
+
 capitalCosts :: Float -> Loan -> [Float]
 capitalCosts p loan = do
  	let down_pay = down loan
@@ -15,16 +16,16 @@ capitalCosts p loan = do
 lumpSums :: (Num a) => a -> a -> Int -> [a]
 lumpSums begin end period = [if i == 1 then begin else 0 | i <- [0..period-1]] ++ [end]
 
-cashFlow :: [[Float]] -> Int -> [Float]
+cashFlow :: (RealFrac a) => [[a]] -> Int -> [a]
 cashFlow ll years = take (years+1) $ [sum t | t <- transpose ll]
 
-discount :: (Fractional a) => a -> [a] -> [a]
+discount :: (RealFrac a) => a -> [a] -> [a]
 discount rate xs = [v / (1+rate)^i | (i, v) <- zip [0..] xs]
 
-npv :: (Fractional a) => a -> [a] -> a
+npv :: (RealFrac a) => a -> [a] -> a
 npv rate xs = sum $ discount rate xs
 
-roroi :: (Fractional a, Ord a) => a -> a -> a -> [a] -> a
+roroi :: (RealFrac a, Ord a) => a -> a -> a -> [a] -> a
 roroi rate step tolerance xs =
 	if npv rate xs > tolerance
 		then roroi (rate+step) step tolerance xs
@@ -32,4 +33,3 @@ roroi rate step tolerance xs =
 		then roroi (rate-step) step tolerance xs
 	else rate
 
-		
