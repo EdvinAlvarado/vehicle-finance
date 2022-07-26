@@ -1,2 +1,7 @@
 *.pyc
 vehicle-finance/dist-newstyle/*
+python/build/*
+python/dist/*
+*spec
+*vim
+roroi
